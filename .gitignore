@@ -1,0 +1,9 @@
+package-lock.json
+
+node_modules/
+temp/
+
+/web/public
+/web/.vscode/.ropeproject/
+
+/scraping/.vscode/settings.json

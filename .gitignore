@@ -3,7 +3,8 @@ package-lock.json
 node_modules/
 temp/
 
-/web/public
+/web/public/*
+!/web/public/index.html
 /web/.vscode/.ropeproject/
 
 /scraping/.vscode/settings.json

@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: entrance
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: entrance
+        tier: frontend
+    spec:
+      containers:
+      - name: master
+        image: concert_entrance_node
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 3001

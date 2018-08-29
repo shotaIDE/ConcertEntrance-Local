@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: scraping
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: scraping
+        tier: backend
+    spec:
+      containers:
+      - name: master
+        image: concert_entrance_scraping
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns

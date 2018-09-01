@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: master
-        image: concert_entrance_scraping
+        image: concert-entrance/scraping:v1.0
         resources:
           requests:
             cpu: 100m

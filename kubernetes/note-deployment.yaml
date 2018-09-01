@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: entrance
+  name: note
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: entrance
+        app: note
         tier: frontend
     spec:
       containers:
       - name: master
-        image: concert_entrance_node
+        image: concert-entrance/note:v1.0
         resources:
           requests:
             cpu: 100m

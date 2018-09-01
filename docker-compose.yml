@@ -3,10 +3,10 @@ services:
   node:
     # image: node:alpine
     build: ./web
-    # command: node concert_entrance_server.js
+    # command: node --inspect-brk=0.0.0.0:9229 concert_entrance_server.js
     ports:
       - "3001:3001"
-      - "9229:9229"
+      # - "9229:9229"
     # volumes:
     #   - ./web:/home/node/web
     # working_dir: '/home/node/web'

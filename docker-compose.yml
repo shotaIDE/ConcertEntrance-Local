@@ -1,8 +1,9 @@
 version: '3'
 services:
-  node:
+  note:
     # image: node:alpine
     build: ./web
+    image: concert-entrance/note:v1.0
     # command: node --inspect-brk=0.0.0.0:9229 concert_entrance_server.js
     ports:
       - "3001:3001"
@@ -13,10 +14,11 @@ services:
 
   scraping:
     build: ./scraping
+    image: concert-entrance/scraping:v1.0
     container_name: scraping
     # command: python concert_scraping.py
     depends_on:
-      - node
+      - note
       - selenium-hub
     # volumes:
     #   - ./scraping:/root/scraping

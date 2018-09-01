@@ -14,7 +14,7 @@ from selenium.webdriver.support.ui import Select
 import requests
 
 SELENIUM_HUB = 'http://selenium-hub:4444/wd/hub'
-WEB_HOST = 'http://node:3001'
+WEB_HOST = 'http://note:3001'
 
 response = requests.get(WEB_HOST + '/api/delete')
 if response.status_code != 200:

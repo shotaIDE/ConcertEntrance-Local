@@ -18,7 +18,7 @@ services:
     # command: python concert_scraping.py
     depends_on:
       - node
-      - chrome
+      - selenium-hub
     # volumes:
     #   - ./scraping:/root/scraping
     # working_dir: '/root/scraping'

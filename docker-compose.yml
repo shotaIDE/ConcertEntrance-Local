@@ -9,7 +9,7 @@ services:
       # - "9229:9229"
     # volumes:
     #   - ./web:/home/node/web
-    # working_dir: '/home/node/web'
+    working_dir: '/home/node/web'
 
   scraping:
     build: ./scraping
@@ -20,7 +20,7 @@ services:
       - selenium-hub
     # volumes:
     #   - ./scraping:/root/scraping
-    # working_dir: '/root/scraping'
+    working_dir: '/root/scraping'
 
   selenium-hub:
     image: selenium/hub

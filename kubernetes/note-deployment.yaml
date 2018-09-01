@@ -13,9 +13,17 @@ spec:
       containers:
       - name: master
         image: concert-entrance/note:v1.0
+        # volumeMounts:
+        # - mountPath: /home/node/note
+        #   name: note-volume
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
         ports:
         - containerPort: 3001
+      # volumes:
+      # - name: note-volume
+      #   hostPath:
+      #     path: ${PROJECT_DIR}/note
+      #     type: Directory

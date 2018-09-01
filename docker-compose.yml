@@ -13,7 +13,6 @@ services:
 
   scraping:
     build: ./scraping
-    tty: true
     container_name: scraping
     # command: python concert_scraping.py
     depends_on:

@@ -2,15 +2,15 @@ version: '3'
 services:
   note:
     # image: node:alpine
-    build: ./web
+    build: ./note
     image: ${IMAGE_REPOSITORY}/note:${NOTE_VERSION}
     # command: node --inspect-brk=0.0.0.0:9229 concert_entrance_server.js
     ports:
       - "80:3001"
       # - "9229:9229"
     # volumes:
-    #   - ./web:/home/node/web
-    working_dir: '/home/node/web'
+    #   - ./note:/home/node/note
+    working_dir: '/home/node/note'
 
   scraping:
     build: ./scraping

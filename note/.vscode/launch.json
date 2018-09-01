@@ -11,7 +11,7 @@
             "port": 9229,
             "address": "localhost",
             "localRoot": "${workspaceFolder}",
-            "remoteRoot": "/home/node/web",
+            "remoteRoot": "/home/node/note",
             "protocol": "inspector",
         }
     ]

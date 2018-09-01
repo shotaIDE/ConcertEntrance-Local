@@ -1,10 +1,10 @@
 {
-  "name": "bbs",
+  "name": "concert_entrance",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node bbs-server.js",
+    "start": "node concert_entrance_server.js",
     "build": "webpack",
     "watch": "webpack -w"
   },

@@ -1,8 +1,16 @@
-const NeDB = require('nedb')
-
-const db = new NeDB({
-  filename: '/home/node/concerts.db',
-  autoload: true
+const mysql = require('mysql')
+const connection = mysql.createConnection({
+  host: 'mysql',
+  user: 'root',
+  password: 'z',
+  database: 'concert_entrance'
+})
+connection.connect((err) => {
+  if (err) {
+    console.error(err)
+    exit
+  }
+  console.log('connected as id ' + connection.threadId)
 })
 
 const express = require('express')
@@ -23,49 +31,40 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/getItems', (req, res) => {
-  db.find({}).sort({heldTimestamp: 1}).exec((err, data) => {
-    if (err) {
-      sendJSON(res, false, {logs: [], msg: err})
+  connection.query("SELECT status, timestamp FROM update_info WHERE content='concert_list'", (error, results, fields) => {
+    if (error) {
+      console.error(error)
+      sendJSON(res, false, {msg: error})
       return
     }
-    console.log(data)
-    sendJSON(res, true, {data: data})
-  })
-})
-
-app.post('/api/write', upload.array(), (req, res) => {
-  const body = req.body
-  let data = {
-    title: body.title,
-    srcUrl: body.srcUrl,
-    heldDate: body.heldDate,
-    heldTime: body.heldTime,
-    onSaleDate: body.onSaleDate,
-    heldPlace: body.heldPlace,
-    description: body.description,
-    stime: (new Date()).getTime()
-  }
-  if (body.heldTimestamp) {
-    data.heldTimestamp = body.heldTimestamp
-  }
-  db.insert(data, (err, doc) => {
-    if (err) {
-      console.error(err)
-      sendJSON(res, false, {msg: err})
+    const status = results[0]['status']
+    if (status !== 'succeed') {
+      errorMsg = 'data is not inserted in concert_list'
+      console.error(errorMsg)
+      sendJSON(res, false, {msg: errorMsg})
       return
     }
-    sendJSON(res, true, {id: doc._id})
-  })
-})
-
-app.get('/api/delete', (req, res) => {
-  db.remove({}, {multi: true}, (err, n) => {
-    if (err) {
-      console.error(err)
-      sendJSON(res, false, {msg: err})
-      return
-    }
-    sendJSON(res, true, {num: n})
+    const timestamp = results[0]['timestamp']
+    connection.query('SELECT * FROM concert_list', (error, results, fields) => {
+      if (error) {
+        console.error(error)
+        sendJSON(res, false, {msg: error})
+        return
+      }
+      const resultsRes = results.map((e) => {
+        return {
+          title: e['title'],
+          srcUrl: e['src_url'],
+          heldDate: e['held_date'],
+          heldTime: e['held_time'],
+          onSaleDate: e['on_sale_date'],
+          heldPlace: e['held_place'],
+          description: e['description']
+        }
+      })
+      console.log(results)
+      sendJSON(res, true, {data: resultsRes, timestamp: timestamp})
+    })
   })
 })
 

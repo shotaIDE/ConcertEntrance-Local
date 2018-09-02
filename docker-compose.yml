@@ -20,11 +20,17 @@ services:
     # ports:
     #   - "3000:3000"
     depends_on:
-      - note
+      - mysql
       - selenium-hub
     # volumes:
     #   - ./scraping:/root/scraping
     working_dir: '/root/scraping'
+
+  mysql:
+    image: mysql:5.7
+    env_file: ./mysql.env
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
 
   selenium-hub:
     image: selenium/hub

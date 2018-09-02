@@ -6,25 +6,18 @@ import re
 from datetime import datetime, timedelta, timezone
 from time import sleep
 import json
+import mysql.connector
 
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import Select
-
-import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--debug', action='store_true', default=False)
 parser.add_argument('--local', action='store_true', default=False)
 arguments = parser.parse_args()
 
-WEB_HOST = 'http://note:3001'
 LOCAL_SOURCE_FILE = 'temp/data.json'
-
-response = requests.get(WEB_HOST + '/')
-if response.status_code != 200:
-    print(response)
-    exit()
 
 IS_DEBUG = arguments.debug
 if IS_DEBUG:
@@ -146,10 +139,47 @@ else:
     f = open(LOCAL_SOURCE_FILE, 'w')
     json.dump(details, f, ensure_ascii=False, indent=4, separators=(',', ': '))
 
-response = requests.get(WEB_HOST + '/api/delete')
-if response.status_code != 200:
-    print(response)
-    exit()
+content_name = 'concert_list'
 
+conn = mysql.connector.connect(user='root', password='z', host='mysql', database='concert_entrance')
+cur = conn.cursor()
+
+cur.execute("CREATE TABLE IF NOT EXISTS concert_list (" \
+    "`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, " \
+    "`title` VARCHAR(100), " \
+    "`src_url` VARCHAR(100), " \
+    "`held_timestamp` TIMESTAMP, " \
+    "`held_date` VARCHAR(100), " \
+    "`held_time` VARCHAR(100), " \
+    "`on_sale_date` VARCHAR(100), " \
+    "`held_place` VARCHAR(100), " \
+    "`description` VARCHAR(500) " \
+    ") ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+
+sql_rows = []
 for detail in details:
-    response = requests.post(WEB_HOST + '/api/write', data=detail)
+    sql_rows.append(detail['title'][:100])
+    sql_rows.append(detail['srcUrl'][:100])
+    sql_rows.append(datetime.fromtimestamp(detail['heldTimestamp']) if 'heldTimestamp' in detail else None)
+    sql_rows.append(detail['heldDate'][:100])
+    sql_rows.append(detail['heldTime'][:100])
+    sql_rows.append(detail['onSaleDate'][:100])
+    sql_rows.append(detail['heldPlace'][:100])
+    sql_rows.append(detail['description'][:500])
+sql_value_description = ', '.join(["({:})".format(', '.join(['%s' for i in range(8)])) for i in range(len(details))])
+cur.execute("INSERT INTO concert_list (`title`, `src_url`, `held_timestamp`, `held_date`, `held_time`, `on_sale_date`, `held_place`, `description`) " \
+    "VALUES " + sql_value_description + ";", sql_rows)
+conn.commit()
+
+cur.execute("CREATE TABLE IF NOT EXISTS update_info (" \
+    "`content` VARCHAR(20) NOT NULL PRIMARY KEY, " \
+    "`status` VARCHAR(20), " \
+    "`timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP " \
+    ");")
+cur.execute("INSERT INTO update_info (content, status) VALUES (%s, %s) " \
+    "ON DUPLICATE KEY UPDATE `content`=%s, `status`=%s;"
+    , [content_name, 'succeed', content_name, 'succeed'])
+conn.commit()
+
+cur.close
+conn.close

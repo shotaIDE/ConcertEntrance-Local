@@ -20,7 +20,10 @@ class ConcertEntranceApp extends React.Component {
           console.error(err)
           return
         }
-        this.setState({items: data.body.data})
+        this.setState({
+          items: data.body.data,
+          timestamp: data.body.timestamp
+        })
       })
   }
   render () {
@@ -37,6 +40,9 @@ class ConcertEntranceApp extends React.Component {
     return (
       <div>
         <h1 style={styles.h1}>クラシックコンサート検索</h1>
+        <p style={styles.right}>
+          最終更新日時：{this.state.timestamp}
+        </p>
         <p style={styles.right}>
           <button onClick={e => this.loadLogs()}>
           Reload</button></p>

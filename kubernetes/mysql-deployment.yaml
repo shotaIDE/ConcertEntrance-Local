@@ -12,6 +12,7 @@ spec:
       containers:
       - name: mysql
         image: concert-entrance/mysql:v1.0
+        imagePullPolicy: Always
         env:
         - name: MYSQL_DATABASE
           value: concert_entrance

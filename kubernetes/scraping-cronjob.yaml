@@ -11,6 +11,7 @@ spec:
           containers:
           - name: master
             image: concert-entrance/scraping:v1.0
+            imagePullPolicy: Always
             # command: [ "python", "concert_scraping.py", "--debug", "--local" ]
             # volumeMounts:
             # - mountPath: /root/scraping

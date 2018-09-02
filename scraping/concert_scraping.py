@@ -1,6 +1,7 @@
 # coding: UTF-8
 
 import sys
+import os
 import argparse
 import re
 from datetime import datetime, timedelta, timezone
@@ -17,7 +18,8 @@ parser.add_argument('--debug', action='store_true', default=False)
 parser.add_argument('--local', action='store_true', default=False)
 arguments = parser.parse_args()
 
-LOCAL_SOURCE_FILE = 'temp/data.json'
+LOCAL_SOURCE_DIR = 'temp'
+LOCAL_SOURCE_FILE = LOCAL_SOURCE_DIR + '/data.json'
 
 IS_DEBUG = arguments.debug
 if IS_DEBUG:
@@ -26,10 +28,14 @@ if IS_DEBUG:
     ptvsd.wait_for_attach()
 
 FROM_LOCAL_SOURCE = arguments.local
+source_loaded = False
 if FROM_LOCAL_SOURCE:
-    with open(LOCAL_SOURCE_FILE) as f:
-        details = json.load(f)
-else:
+    if os.path.isfile(LOCAL_SOURCE_FILE):
+        with open(LOCAL_SOURCE_FILE) as f:
+            details = json.load(f)
+        source_loaded = True
+
+if FROM_LOCAL_SOURCE or not source_loaded:
     SELENIUM_HUB = 'http://selenium-hub:4444/wd/hub'
     driver = webdriver.Remote(
         command_executor=SELENIUM_HUB,
@@ -136,6 +142,7 @@ else:
 
     driver.quit()
 
+    os.makedirs(LOCAL_SOURCE_DIR, exist_ok=True)
     f = open(LOCAL_SOURCE_FILE, 'w')
     json.dump(details, f, ensure_ascii=False, indent=4, separators=(',', ': '))
 

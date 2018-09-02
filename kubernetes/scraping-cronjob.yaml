@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: scraping
 spec:
-  schedule: "0 4 * * *"
+  schedule: "40 * * * *"
   jobTemplate:
     spec:
       template:
@@ -11,4 +11,18 @@ spec:
           containers:
           - name: master
             image: concert-entrance/scraping:v1.0
+            # command: [ "python", "concert_scraping.py", "--debug", "--local" ]
+            # volumeMounts:
+            # - mountPath: /root/scraping
+            #   name: scraping-debug-volume
+            env:
+            - name: GET_HOSTS_FROM
+              value: dns
+            # ports:
+            # - containerPort: 3000
+          # volumes:
+          # - name: scraping-debug-volume
+          #   hostPath:
+          #     path: //c/Users/ide/works/concert_entrance/scraping
+          #     type: Directory
           restartPolicy: OnFailure

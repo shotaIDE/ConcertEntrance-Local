@@ -16,7 +16,9 @@ services:
     build: ./scraping
     image: ${IMAGE_REPOSITORY}/scraping:${SCRAPING_VERSION}
     container_name: scraping
-    # command: python concert_scraping.py
+    # command: python concert_scraping.py --debug
+    # ports:
+    #   - "3000:3000"
     depends_on:
       - note
       - selenium-hub

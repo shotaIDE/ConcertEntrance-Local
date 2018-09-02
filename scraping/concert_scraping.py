@@ -13,6 +13,16 @@ from selenium.webdriver.support.ui import Select
 
 import requests
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--debug', action='store_true', default=False)
+arguments = parser.parse_args()
+
+IS_DEBUG = arguments.debug
+if IS_DEBUG:
+    import ptvsd
+    ptvsd.enable_attach('my_secret', address=('0.0.0.0', 3000))
+    ptvsd.wait_for_attach()
+
 SELENIUM_HUB = 'http://selenium-hub:4444/wd/hub'
 WEB_HOST = 'http://note:3001'
 
@@ -129,5 +139,5 @@ driver.quit()
 for detail in details:
     response = requests.post(WEB_HOST + '/api/write', data=detail)
 
-f = open('data.json', 'w')
+f = open('temp/data.json', 'w')
 json.dump(details, f, ensure_ascii=False, indent=4, separators=(',', ': '))

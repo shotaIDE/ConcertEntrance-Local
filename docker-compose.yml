@@ -16,7 +16,7 @@ services:
     build: ./scraping
     image: ${IMAGE_REPOSITORY}/scraping:${SCRAPING_VERSION}
     container_name: scraping
-    # command: python concert_scraping.py --debug
+    # command: python concert_scraping.py --debug --local
     # ports:
     #   - "3000:3000"
     depends_on:

@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: note-frontend
+  name: note-front
   labels:
-    app: note-frontend
+    app: note-front
     tier: frontend
 spec:
   type: LoadBalancer

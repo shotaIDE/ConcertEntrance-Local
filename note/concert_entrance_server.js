@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/getItems', (req, res) => {
-  connection.query("SELECT status, timestamp FROM update_info WHERE content='concert_list'", (error, results, fields) => {
+  connection.query("SELECT `status`, `timestamp` FROM update_info WHERE `content`='concert_list'", (error, results, fields) => {
     if (error) {
       console.error(error)
       sendJSON(res, false, {msg: error})
@@ -44,7 +44,7 @@ app.get('/api/getItems', (req, res) => {
       sendJSON(res, false, {msg: errorMsg})
       return
     }
-    const timestamp = results[0]['timestamp']
+    const updateTimestamp = results[0]['timestamp']
     connection.query('SELECT * FROM concert_list', (error, results, fields) => {
       if (error) {
         console.error(error)
@@ -63,7 +63,7 @@ app.get('/api/getItems', (req, res) => {
         }
       })
       console.log(results)
-      sendJSON(res, true, {data: resultsRes, timestamp: timestamp})
+      sendJSON(res, true, {data: resultsRes, timestamp: updateTimestamp})
     })
   })
 })

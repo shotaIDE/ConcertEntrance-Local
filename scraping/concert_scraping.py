@@ -86,7 +86,7 @@ if not FROM_LOCAL_SOURCE or not source_loaded:
             print(title)
 
         try:
-            driver.find_element_by_partial_link_text('次へ').click()
+            driver.find_element_by_partial_link_text('ćŹĄă¸').click()
         except Exception:
             break
 
@@ -127,13 +127,13 @@ if not FROM_LOCAL_SOURCE or not source_loaded:
             held_datetime = datetime.strptime(
                 "{:} {:}".format(held_date, held_time),
                 '%Y/%m/%d %H:%M')
-            detail['heldTimestamp'] = held_datetime.replace(tzinfo=timezone.utc).timestamp()
+            detail['heldTimestamp'] = held_datetime.strftime("%Y/%m/%d %H:%M:%S")
             print(held_datetime)
         elif date_matched:
             held_datetime = datetime.strptime(
                 held_date,
                 '%Y/%m/%d')
-            detail['heldTimestamp'] = held_datetime.replace(tzinfo=timezone.utc).timestamp()
+            detail['heldTimestamp'] = held_datetime.strftime("%Y/%m/%d %H:%M:%S")
             print(held_datetime)
         else:
             print("{:} {:}".format(held_date, held_time))
@@ -155,7 +155,7 @@ cur.execute("CREATE TABLE IF NOT EXISTS concert_list (" \
     "`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, " \
     "`title` VARCHAR(100), " \
     "`src_url` VARCHAR(100), " \
-    "`held_timestamp` TIMESTAMP, " \
+    "`held_timestamp` DATETIME, " \
     "`held_date` VARCHAR(100), " \
     "`held_time` VARCHAR(100), " \
     "`on_sale_date` VARCHAR(100), " \
@@ -167,7 +167,7 @@ sql_rows = []
 for detail in details:
     sql_rows.append(detail['title'][:100])
     sql_rows.append(detail['srcUrl'][:100])
-    sql_rows.append(datetime.fromtimestamp(detail['heldTimestamp']) if 'heldTimestamp' in detail else None)
+    sql_rows.append(datetime.strptime(detail['heldTimestamp'], "%Y/%m/%d %H:%M:%S") if 'heldTimestamp' in detail else None)
     sql_rows.append(detail['heldDate'][:100])
     sql_rows.append(detail['heldTime'][:100])
     sql_rows.append(detail['onSaleDate'][:100])
@@ -181,11 +181,12 @@ conn.commit()
 cur.execute("CREATE TABLE IF NOT EXISTS update_info (" \
     "`content` VARCHAR(20) NOT NULL PRIMARY KEY, " \
     "`status` VARCHAR(20), " \
-    "`timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP " \
+    "`timestamp` DATETIME NOT NULL " \
     ");")
-cur.execute("INSERT INTO update_info (content, status) VALUES (%s, %s) " \
-    "ON DUPLICATE KEY UPDATE `content`=%s, `status`=%s;"
-    , [content_name, 'succeed', content_name, 'succeed'])
+update_timestamp = datetime.now()
+cur.execute("INSERT INTO update_info (`content`, `status`, `timestamp`) VALUES (%s, %s, %s) " \
+    "ON DUPLICATE KEY UPDATE `content`=%s, `status`=%s, `timestamp`=%s;"
+    , [content_name, 'succeed', update_timestamp, content_name, 'succeed', update_timestamp])
 conn.commit()
 
 cur.close

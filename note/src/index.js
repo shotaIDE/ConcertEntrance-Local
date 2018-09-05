@@ -37,11 +37,12 @@ class ConcertEntranceApp extends React.Component {
         </ul>
       </li>
     ))
+    const updateTimestamp = new Date(this.state.timestamp)
     return (
       <div>
         <h1 style={styles.h1}>クラシックコンサート検索</h1>
         <p style={styles.right}>
-          最終更新日時：{this.state.timestamp}
+          最終更新日時：{updateTimestamp.toLocaleString()}
         </p>
         <p style={styles.right}>
           <button onClick={e => this.loadLogs()}>

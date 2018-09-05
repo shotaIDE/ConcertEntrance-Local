@@ -14,6 +14,7 @@ spec:
       - name: master
         image: concert-entrance/note:v1.0
         imagePullPolicy: Always
+        # imagePullPolicy: IfNotPresent
         # command: [ "node", "--inspect-brk=0.0.0.0:9229", "concert_entrance_server.js" ]
         # volumeMounts:
         # - mountPath: /home/node/note

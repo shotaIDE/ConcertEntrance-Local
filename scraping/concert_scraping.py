@@ -35,7 +35,7 @@ if FROM_LOCAL_SOURCE:
             details = json.load(f)
         source_loaded = True
 
-if FROM_LOCAL_SOURCE or not source_loaded:
+if not FROM_LOCAL_SOURCE or not source_loaded:
     SELENIUM_HUB = 'http://selenium-hub:4444/wd/hub'
     driver = webdriver.Remote(
         command_executor=SELENIUM_HUB,

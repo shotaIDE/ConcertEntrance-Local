@@ -4,7 +4,6 @@ metadata:
   name: note-front
   labels:
     app: note-front
-    tier: frontend
 spec:
   type: LoadBalancer
   ports:
@@ -12,4 +11,3 @@ spec:
     targetPort: 3001
   selector:
     app: note
-    tier: frontend

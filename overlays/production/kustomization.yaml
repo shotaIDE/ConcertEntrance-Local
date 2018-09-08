@@ -1,0 +1,6 @@
+commonLabels:
+  variant: prod
+commonAnnotations:
+  note: Hello, I am production!
+bases:
+- ../../base

@@ -1,0 +1,24 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: scraping
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: master
+            imagePullPolicy: IfNotPresent
+            command: [ "python", "concert_scraping.py", "--debug", "--local" ]
+            volumeMounts:
+            - mountPath: /root/scraping
+              name: scraping-debug-volume
+            ports:
+            - containerPort: 3000
+          volumes:
+          - name: scraping-debug-volume
+            hostPath:
+              path: //c/Users/ide/works/concert_entrance/scraping
+              type: Directory

@@ -1,28 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: chrome
+  name: selenium-hub
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: chrome
-        tier: backend
+        app: selenium-hub
     spec:
       containers:
       - name: master
-        image: selenium/node-chrome-debug
+        image: selenium/hub
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
-        env:
-        - name: GET_HOSTS_FROM
-          value: dns
-        - name: HUB_HOST
-          value: selenium-hub
-        - name: HUB_PORT
-          value: '4444'
         ports:
         - containerPort: 4444

@@ -1,21 +1,21 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: selenium-hub
+  name: note
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: selenium-hub
-        tier: backend
+        app: note
     spec:
       containers:
       - name: master
-        image: selenium/hub
+        image: concert-entrance/note:v1.0
+        imagePullPolicy: Always
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
         ports:
-        - containerPort: 4444
+        - containerPort: 3001

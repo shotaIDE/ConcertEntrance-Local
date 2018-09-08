@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
   if (err) {
     console.error(err)
-    exit
+    process.exit(1);
   }
   console.log('connected as id ' + connection.threadId)
 })

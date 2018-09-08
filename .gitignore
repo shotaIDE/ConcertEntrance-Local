@@ -3,8 +3,10 @@ package-lock.json
 node_modules/
 temp/
 
-/web/public/*
-!/web/public/index.html
-/web/.vscode/.ropeproject/
+/note/public/*
+!/note/public/index.html
+/note/.vscode/.ropeproject/
 
 /scraping/.vscode/settings.json
+
+/volumes

@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: note
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: note
+    spec:
+      containers:
+      - name: master
+        image: concert-entrance/note:v1.0
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 3001

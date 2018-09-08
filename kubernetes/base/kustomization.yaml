@@ -1,0 +1,10 @@
+resources:
+  - chrome-deployment.yaml
+  - chrome-service.yaml
+  - mysql-deployment.yaml
+  - mysql-service.yaml
+  - note-deployment.yaml
+  - note-front-service.yaml
+  - scraping-cronjob.yaml
+  - selenium-hub-deployment.yaml
+  - selenium-hub-service.yaml

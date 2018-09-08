@@ -1,0 +1,14 @@
+commonLabels:
+  variant: dev
+commonAnnotations:
+  note: Hello, I am development!
+bases:
+- ../../base
+resources:
+- note-debug-service.yaml
+- scraping-debug-service.yaml
+- selenium-hub-debug-service.yaml
+patches:
+- mysql-deployment.yaml
+- note-deployment.yaml
+- scraping-cronjob.yaml

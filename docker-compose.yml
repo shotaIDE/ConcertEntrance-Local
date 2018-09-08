@@ -1,27 +1,37 @@
 version: '3'
 services:
-  node:
+  note:
     # image: node:alpine
-    build: ./web
-    # command: node concert_entrance_server.js
+    build: ./note
+    image: ${IMAGE_REPOSITORY}/note:${NOTE_VERSION}
+    # command: node --inspect-brk=0.0.0.0:9229 concert_entrance_server.js
     ports:
-      - "3001:3001"
-      - "9229:9229"
+      - "80:3001"
+      # - "9229:9229"
     # volumes:
-    #   - ./web:/home/node/web
-    # working_dir: '/home/node/web'
+    #   - ./note:/home/node/note
+    working_dir: '/home/node/note'
 
   scraping:
     build: ./scraping
-    tty: true
+    image: ${IMAGE_REPOSITORY}/scraping:${SCRAPING_VERSION}
     container_name: scraping
-    # command: python concert_scraping.py
+    # command: python concert_scraping.py --debug --local
+    # ports:
+    #   - "3000:3000"
     depends_on:
-      - node
-      - chrome
+      - mysql
+      - selenium-hub
     # volumes:
     #   - ./scraping:/root/scraping
-    # working_dir: '/root/scraping'
+    working_dir: '/root/scraping'
+
+  mysql:
+    build: ./mysql
+    image: ${IMAGE_REPOSITORY}/mysql:${MYSQL_VERSION}
+    env_file: ./mysql.env
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
 
   selenium-hub:
     image: selenium/hub

@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  template:
+    spec:
+      containers:
+      - name: mysql
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: mysql-disk
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-disk
+        hostPath:
+          path: //c/Users/ide/works/concert_entrance/volumes/mysql
+          type: DirectoryOrCreate

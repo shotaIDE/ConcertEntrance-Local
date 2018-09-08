@@ -1,0 +1,11 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: note
+spec:
+  template:
+    spec:
+      containers:
+      - name: master
+        image: gcr.io/endless-upgrade-214504/note:v1.0
+        imagePullPolicy: Always

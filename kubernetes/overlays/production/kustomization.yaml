@@ -1,0 +1,10 @@
+commonLabels:
+  variant: prod
+commonAnnotations:
+  note: Hello, I am production!
+bases:
+- ../../base
+patches:
+- mysql-deployment.yaml
+- note-deployment.yaml
+- scraping-cronjob.yaml

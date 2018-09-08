@@ -1,0 +1,13 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: scraping
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: master
+            image: gcr.io/endless-upgrade-214504/scraping:v1.0
+            imagePullPolicy: Always

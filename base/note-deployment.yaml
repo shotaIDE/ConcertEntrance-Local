@@ -12,7 +12,6 @@ spec:
       containers:
       - name: master
         image: concert-entrance/note:v1.0
-        imagePullPolicy: Always
         resources:
           requests:
             cpu: 100m

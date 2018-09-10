@@ -12,7 +12,7 @@ spec:
       containers:
       - name: master
         imagePullPolicy: IfNotPresent
-        # command: [ "node", "--inspect-brk=0.0.0.0:9000", "concert_entrance_server.js" ]
+        # command: [ "node", "--inspect-brk=0.0.0.0:9000", "server.js" ]
         volumeMounts:
         - mountPath: /home/node/note
           name: note-debug-volume

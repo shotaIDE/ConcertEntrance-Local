@@ -4,7 +4,7 @@ services:
     # image: node:alpine
     build: ./note
     image: ${IMAGE_REPOSITORY}/note:${NOTE_VERSION}
-    # command: node --inspect-brk=0.0.0.0:9000 concert_entrance_server.js
+    # command: node --inspect-brk=0.0.0.0:9000 server.js
     ports:
       - "80:3000"
       # - "9000:9000"

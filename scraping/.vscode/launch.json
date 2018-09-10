@@ -16,7 +16,7 @@
             "request": "attach",
             "localRoot": "${workspaceFolder}",
             "remoteRoot": "/root/scraping",
-            "port": 3000,
+            "port": 9500,
             "secret": "my_secret",
             "host": "localhost"
         },

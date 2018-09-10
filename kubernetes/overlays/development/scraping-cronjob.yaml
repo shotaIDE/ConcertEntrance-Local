@@ -16,7 +16,7 @@ spec:
             - mountPath: /root/scraping
               name: scraping-debug-volume
             ports:
-            - containerPort: 3000
+            - containerPort: 9500
           volumes:
           - name: scraping-debug-volume
             hostPath:

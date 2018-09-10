@@ -4,10 +4,10 @@ services:
     # image: node:alpine
     build: ./note
     image: ${IMAGE_REPOSITORY}/note:${NOTE_VERSION}
-    # command: node --inspect-brk=0.0.0.0:9229 concert_entrance_server.js
+    # command: node --inspect-brk=0.0.0.0:9000 concert_entrance_server.js
     ports:
-      - "80:3001"
-      # - "9229:9229"
+      - "80:3000"
+      # - "9000:9000"
     # volumes:
     #   - ./note:/home/node/note
     working_dir: '/home/node/note'
@@ -18,7 +18,7 @@ services:
     container_name: scraping
     # command: python concert_scraping.py --debug --local
     # ports:
-    #   - "3000:3000"
+    #   - "9500:9500"
     depends_on:
       - mysql
       - selenium-hub

@@ -13,6 +13,6 @@ COPY src/ ./src/
 COPY public/index.html ./public/index.html
 RUN npm run-script build
 
-EXPOSE 3001 9229
+EXPOSE 3000 9000
 
 CMD [ "node", "concert_entrance_server.js" ]

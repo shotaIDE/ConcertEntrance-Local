@@ -20,7 +20,7 @@ const upload = multer();
 const app = express()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const portNo = 3001
+const portNo = 3000
 app.listen(portNo, () => {
   console.log('起動しました', `http://localhost:${portNo}`)
 })

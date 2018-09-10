@@ -35,7 +35,7 @@ class ConcertEntranceApp extends React.Component {
   }
   loadLogs () {
     request
-      .get('/api/getItems')
+      .get('/api/v1/getConcerts')
       .end((err, data) => {
         if (err) {
           console.error(err)

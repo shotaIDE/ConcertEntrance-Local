@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
   res.redirect(302, '/public')
 })
 
-app.get('/api/getItems', (req, res) => {
+app.get('/api/v1/getConcerts', (req, res) => {
   connection.query("SELECT `status`, `timestamp` FROM update_info WHERE `content`='concert_list'", (error, results, fields) => {
     if (error) {
       console.error(error)

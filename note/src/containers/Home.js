@@ -59,9 +59,6 @@ class Home extends React.Component {
             <Typography variant="subheading">
               最終更新日時：{updateTimestamp.toLocaleString()}
             </Typography>
-            <Button variant="contained" color="secondary" onClick={() => this.loadLogs()}>
-              コンサート情報再取得
-            </Button>
           </div>
           <ConcertCardList items={this.state.items} />
         </div>

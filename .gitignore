@@ -1,11 +1,4 @@
-package-lock.json
-
-node_modules/
 temp/
-
-/note/public/*
-!/note/public/index.html
-/note/.vscode/.ropeproject/
 
 /scraping/.vscode/settings.json
 

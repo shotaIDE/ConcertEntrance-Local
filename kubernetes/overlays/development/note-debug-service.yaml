@@ -8,8 +8,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 9229
-    targetPort: 9229
+  - port: 9000
+    targetPort: 9000
   selector:
     app: note
     tier: frontend

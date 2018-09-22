@@ -24,7 +24,7 @@ LOCAL_SOURCE_FILE = LOCAL_SOURCE_DIR + '/data.json'
 IS_DEBUG = arguments.debug
 if IS_DEBUG:
     import ptvsd
-    ptvsd.enable_attach('my_secret', address=('0.0.0.0', 3000))
+    ptvsd.enable_attach('my_secret', address=('0.0.0.0', 9500))
     ptvsd.wait_for_attach()
 
 FROM_LOCAL_SOURCE = arguments.local

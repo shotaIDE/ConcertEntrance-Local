@@ -20,7 +20,7 @@ const upload = multer();
 const app = express()
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-const portNo = 3001
+const portNo = 3000
 app.listen(portNo, () => {
   console.log('起動しました', `http://localhost:${portNo}`)
 })
@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
   res.redirect(302, '/public')
 })
 
-app.get('/api/getItems', (req, res) => {
+app.get('/api/v1/getConcerts', (req, res) => {
   connection.query("SELECT `status`, `timestamp` FROM update_info WHERE `content`='concert_list'", (error, results, fields) => {
     if (error) {
       console.error(error)

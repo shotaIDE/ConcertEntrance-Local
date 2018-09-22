@@ -25,10 +25,9 @@ app.listen(portNo, () => {
   console.log('起動しました', `http://localhost:${portNo}`)
 })
 
-app.use('/public', express.static('./public'))
-app.get('/', (req, res) => {
-  res.redirect(302, '/public')
-})
+// FIXME: ページが増えるごとに以下を対応する必要がある，なんかいい書き方ないか？
+app.use('/', express.static('./public'))
+app.use('/info', express.static('./public'))
 
 app.get('/api/v1/getConcerts', (req, res) => {
   connection.query("SELECT `status`, `timestamp` FROM update_info WHERE `content`='concert_list'", (error, results, fields) => {
@@ -57,8 +56,10 @@ app.get('/api/v1/getConcerts', (req, res) => {
           srcUrl: e['src_url'],
           heldDate: e['held_date'],
           heldTime: e['held_time'],
-          onSaleDate: e['on_sale_date'],
           heldPlace: e['held_place'],
+          onSaleDate: e['on_sale_date'],
+          payment: e['payment'],
+          program: e['program'],
           description: e['description']
         }
       })

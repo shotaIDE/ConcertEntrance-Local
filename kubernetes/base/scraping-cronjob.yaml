@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: master
-            image: concert-entrance/scraping:v1.0
+            image: concert-entrance/scraping:v1.1
             env:
             - name: GET_HOSTS_FROM
               value: dns

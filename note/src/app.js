@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ResponsiveDrawer from './containers/ResponsiveDrawer';
+import WrapMainContent from './components/WrapMainContent'
 import Home from './containers/Home';
 import Info from './containers/Info';
 
@@ -25,9 +26,9 @@ class ConcertEntranceApp extends React.Component {
         <Router>
           <ResponsiveDrawer>
             <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/info" component={Info} />
-              <Route component={NotFound} />
+              <Route exact path="/" component={WrapMainContent(Home)} />
+              <Route exact path="/info" component={WrapMainContent(Info)} />
+              <Route component={WrapMainContent(NotFound)} />
             </Switch>
           </ResponsiveDrawer>
         </Router>

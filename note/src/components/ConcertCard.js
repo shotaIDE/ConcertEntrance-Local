@@ -10,7 +10,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import red from '@material-ui/core/colors/red';
+import lightGreen from '@material-ui/core/colors/lightGreen';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser';
@@ -22,12 +22,16 @@ const styles = theme => ({
     marginTop: 10,
     marginBottom: 10,
   },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
+  content: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginTop: 0,
+    marginBottom: 0,
   },
   actions: {
     display: 'flex',
+    paddingTop: 0,
+    marginTop: 0,
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -43,7 +47,7 @@ const styles = theme => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
-    backgroundColor: red[500],
+    backgroundColor: lightGreen[700],
   },
 });
 
@@ -62,14 +66,13 @@ class ConcertCard extends React.Component {
       <Card className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label="Recipe" className={classes.avatar}>
-              R
+            <Avatar aria-label="Concert" className={classes.avatar}>
+              C
             </Avatar>
           }
           title={item.title}
-          subheader={heldDatetime}
-        />
-        <CardContent>
+          subheader={heldDatetime} />
+        <CardContent className={classes.content}>
           <Typography component="p">
             前売開始日：{item.onSaleDate}
           </Typography>
@@ -90,13 +93,12 @@ class ConcertCard extends React.Component {
             })}
             onClick={this.handleExpandClick}
             aria-expanded={this.state.expanded}
-            aria-label="もっと見る"
-          >
+            aria-label="もっと見る">
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-          <CardContent>
+          <CardContent className={classes.content}>
             <Typography paragraph>
               {item.description}
             </Typography>

@@ -15,8 +15,8 @@ import HomeIcon from '@material-ui/icons/Home';
 import ResponsiveDrawerListItem from '../components/ResponsiveDrawerListItem';
 
 const drawerWidth = 240;
-const headerNavigationHeight = 56;
-const bottomNavigationHeight = 56;
+const topNavigationHeight = 56;
+const bottomNavigationHeight = 0;
 
 const styles = theme => ({
   root: {
@@ -36,7 +36,7 @@ const styles = theme => ({
     },
   },
   toolBar: {
-    minHeight: bottomNavigationHeight,
+    minHeight: topNavigationHeight,
   },
   navIconHide: {
     marginLeft: -14,
@@ -57,7 +57,7 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
-    paddingTop: `calc(10px + ${headerNavigationHeight}px)`,
+    paddingTop: `calc(10px + ${topNavigationHeight}px)`,
     paddingBottom: `calc(10px + ${bottomNavigationHeight}px)`,
     paddingLeft: 0,
     paddingRight: 0,

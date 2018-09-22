@@ -6,12 +6,14 @@ import { withStyles } from '@material-ui/core/styles';
 import request from 'superagent'
 
 import ConcertCardList from '../components/ConcertCardList';
+import { Typography } from '@material-ui/core';
 
 const styles = {
   root: {
   },
   container: {
     maxWidth: 860,
+    padding: 10,
     margin: 'auto',
   },
   header: {
@@ -54,10 +56,10 @@ class Home extends React.Component {
       <div className={classes.root}>
         <div className={classes.container}>
           <div className={classes.header}>
-            <p>
+            <Typography variant="subheading">
               最終更新日時：{updateTimestamp.toLocaleString()}
-            </p>
-            <Button variant="contained" color="primary" onClick={() => this.loadLogs()}>
+            </Typography>
+            <Button variant="contained" color="secondary" onClick={() => this.loadLogs()}>
               コンサート情報再取得
             </Button>
           </div>

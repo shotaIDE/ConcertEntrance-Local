@@ -1,17 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-
-import request from 'superagent'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ResponsiveDrawer from './containers/ResponsiveDrawer';
 import Home from './containers/Home';
+import Info from './containers/Info';
 
-const styles = {
-  root: {
-    flexGrow: 1,
-  },
-};
+const NotFound = () => {
+  return(
+    <h2>Page Not Found</h2>
+  )
+}
 
 class ConcertEntranceApp extends React.Component {
   constructor (props) {
@@ -20,37 +18,22 @@ class ConcertEntranceApp extends React.Component {
       items: []
     }
   }
-  componentWillMount () {
-    this.loadLogs()
-  }
-  loadLogs () {
-    request
-      .get('/api/v1/getConcerts')
-      .end((err, data) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-        this.setState({
-          items: data.body.data,
-          timestamp: data.body.timestamp
-        })
-      })
-  }
+
   render () {
-    const { classes } = this.props;
-    const updateTimestamp = new Date(this.state.timestamp)
     return (
-      <div className={classes.root}>
-        <ResponsiveDrawer />
-        <Home />
+      <div className="App">
+        <Router>
+          <ResponsiveDrawer>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/info" component={Info} />
+              <Route component={NotFound} />
+            </Switch>
+          </ResponsiveDrawer>
+        </Router>
       </div>
     )
   }
 }
 
-ConcertEntranceApp.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(ConcertEntranceApp);
+export default ConcertEntranceApp;

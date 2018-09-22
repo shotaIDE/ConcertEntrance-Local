@@ -85,8 +85,6 @@ if not FROM_LOCAL_SOURCE or not source_loaded:
             })
             print(title)
 
-        break
-
         try:
             driver.find_element_by_partial_link_text('次へ').click()
         except Exception:

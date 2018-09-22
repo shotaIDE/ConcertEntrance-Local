@@ -23,15 +23,13 @@ class ConcertEntranceApp extends React.Component {
   render () {
     return (
       <div className="App">
-        <Router>
-          <ResponsiveDrawer>
-            <Switch>
-              <Route exact path="/" component={WrapMainContent(Home)} />
-              <Route exact path="/info" component={WrapMainContent(Info)} />
-              <Route component={WrapMainContent(NotFound)} />
-            </Switch>
-          </ResponsiveDrawer>
-        </Router>
+        <ResponsiveDrawer>
+          <Switch>
+            <Route exact path="/" component={WrapMainContent(Home)} />
+            <Route exact path="/info" component={WrapMainContent(Info)} />
+            <Route component={WrapMainContent(NotFound)} />
+          </Switch>
+        </ResponsiveDrawer>
       </div>
     )
   }

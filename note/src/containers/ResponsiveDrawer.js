@@ -129,7 +129,6 @@ class ResponsiveDrawer extends React.Component {
           <Drawer
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            anchor="left"
             open={this.state.mobileOpen}
             onClose={this.closeDrawerNav}
             classes={{

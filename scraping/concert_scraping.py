@@ -32,7 +32,7 @@ source_loaded = False
 if FROM_LOCAL_SOURCE:
     if os.path.isfile(LOCAL_SOURCE_FILE):
         with open(LOCAL_SOURCE_FILE) as f:
-            details = json.load(f)
+            concert_details_raw = json.load(f)
         source_loaded = True
 
 if not FROM_LOCAL_SOURCE or not source_loaded:
@@ -85,17 +85,14 @@ if not FROM_LOCAL_SOURCE or not source_loaded:
             })
             print(title)
 
+        break
+
         try:
-            driver.find_element_by_partial_link_text('ćŹĄă¸').click()
+            driver.find_element_by_partial_link_text('次へ').click()
         except Exception:
             break
 
-    details = []
-
-    DATE_PATTERN = r"([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]).*"
-    TIME_PATTERN = r"([0-9][0-9]):([0-9][0-9])"
-    date_re = re.compile(DATE_PATTERN)
-    time_re = re.compile(TIME_PATTERN)
+    concert_details_raw = []
 
     for summary in summaries:
         src_url = summary['url']
@@ -107,50 +104,85 @@ if not FROM_LOCAL_SOURCE or not source_loaded:
         held_place = driver.find_element_by_xpath('//*[@id="detail_area"]/div/table/tbody/tr[3]/td[2]/p').text
         description = driver.find_element_by_xpath('//*[@id="detail_area"]/div/table/tbody/tr[4]/td[2]').text
 
-        held_date = held_date_raw[:10]
-        held_time = held_time_raw[:5]
-        on_sale_date = on_sale_date_raw[:10]
-
-        detail = {
+        concert_detail_raw = {
             'title': summary['title'],
-            'srcUrl': src_url,
-            'heldDate': held_date,
-            'heldTime': held_time,
-            'onSaleDate': on_sale_date,
-            'heldPlace': held_place,
+            'src_url': src_url,
+            'held_date': held_date_raw,
+            'held_time': held_time_raw,
+            'on_sale_date': on_sale_date_raw,
+            'held_place': held_place,
             'description': description
         }
 
-        date_matched = date_re.match(held_date)
-        time_matched = time_re.match(held_time)
-        if date_matched and time_matched:
-            held_datetime = datetime.strptime(
-                "{:} {:}".format(held_date, held_time),
-                '%Y/%m/%d %H:%M')
-            detail['heldTimestamp'] = held_datetime.strftime("%Y/%m/%d %H:%M:%S")
-            print(held_datetime)
-        elif date_matched:
-            held_datetime = datetime.strptime(
-                held_date,
-                '%Y/%m/%d')
-            detail['heldTimestamp'] = held_datetime.strftime("%Y/%m/%d %H:%M:%S")
-            print(held_datetime)
-        else:
-            print("{:} {:}".format(held_date, held_time))
-
-        details.append(detail)
+        concert_details_raw.append(concert_detail_raw)
 
     driver.quit()
 
     os.makedirs(LOCAL_SOURCE_DIR, exist_ok=True)
     f = open(LOCAL_SOURCE_FILE, 'w')
-    json.dump(details, f, ensure_ascii=False, indent=4, separators=(',', ': '))
+    json.dump(concert_details_raw, f, ensure_ascii=False, indent=4, separators=(',', ': '))
+
+DATE_PATTERN = r"([0-9][0-9][0-9][0-9])/([0-9][0-9])/([0-9][0-9]).*"
+date_re = re.compile(DATE_PATTERN)
+TIME_PATTERN = r"([0-9][0-9]):([0-9][0-9])"
+time_re = re.compile(TIME_PATTERN)
+PROGRAM_PATTERN = r'(.*)^曲／([\S ]*)$\n*(.*)'
+program_re = re.compile(PROGRAM_PATTERN, re.MULTILINE | re.DOTALL)
+PAYMENT_PATTERN = r'(.*)^料金／([\S ]*)$\n*(.*)'
+payment_re = re.compile(PAYMENT_PATTERN, re.MULTILINE | re.DOTALL)
+
+concert_details = []
+for concert_detail_raw in concert_details_raw:
+    concert_detail = {
+        'title': concert_detail_raw['title'],
+        'src_url': concert_detail_raw['src_url'],
+        'held_place': concert_detail_raw['held_place'],
+    }
+
+    held_date = concert_detail_raw['held_date'][:10]
+    held_time = concert_detail_raw['held_time'][:5]
+    on_sale_date = concert_detail_raw['on_sale_date'][:10]
+    concert_detail['held_date'] = held_date
+    concert_detail['held_time'] = held_time
+    concert_detail['on_sale_date'] = on_sale_date
+
+    date_matched = date_re.match(held_date)
+    time_matched = time_re.match(held_time)
+    if date_matched and time_matched:
+        held_datetime = datetime.strptime(
+            "{:} {:}".format(held_date, held_time),
+            '%Y/%m/%d %H:%M')
+        concert_detail['held_timestamp'] = held_datetime.strftime("%Y/%m/%d %H:%M:%S")
+    elif date_matched:
+        held_datetime = datetime.strptime(
+            held_date,
+            '%Y/%m/%d')
+        concert_detail['held_timestamp'] = held_datetime.strftime("%Y/%m/%d %H:%M:%S")
+
+    description = concert_detail_raw['description']
+
+    program_matched = program_re.match(description)
+    if program_matched:
+        concert_detail['program'] = program_matched.groups()[1]
+        description = program_matched.groups()[0] + program_matched.groups()[2]
+
+    payment_matched = payment_re.match(description)
+    if payment_matched:
+        concert_detail['payment'] = payment_matched.groups()[1]
+        description = payment_matched.groups()[0] + payment_matched.groups()[2]
+
+    concert_detail['description'] = description
+
+    print(json.dumps(concert_detail, ensure_ascii=False, separators=(',', ':')))
+
+    concert_details.append(concert_detail)
 
 content_name = 'concert_list'
 
 conn = mysql.connector.connect(user='root', password='z', host='mysql', database='concert_entrance')
 cur = conn.cursor()
 
+cur.execute("DROP TABLE IF EXISTS concert_list")
 cur.execute("CREATE TABLE IF NOT EXISTS concert_list (" \
     "`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT, " \
     "`title` VARCHAR(100), " \
@@ -158,23 +190,27 @@ cur.execute("CREATE TABLE IF NOT EXISTS concert_list (" \
     "`held_timestamp` DATETIME, " \
     "`held_date` VARCHAR(100), " \
     "`held_time` VARCHAR(100), " \
-    "`on_sale_date` VARCHAR(100), " \
     "`held_place` VARCHAR(100), " \
+    "`on_sale_date` VARCHAR(100), " \
+    "`payment` VARCHAR(100), " \
+    "`program` VARCHAR(100), " \
     "`description` VARCHAR(500) " \
     ") ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 
 sql_rows = []
-for detail in details:
-    sql_rows.append(detail['title'][:100])
-    sql_rows.append(detail['srcUrl'][:100])
-    sql_rows.append(datetime.strptime(detail['heldTimestamp'], "%Y/%m/%d %H:%M:%S") if 'heldTimestamp' in detail else None)
-    sql_rows.append(detail['heldDate'][:100])
-    sql_rows.append(detail['heldTime'][:100])
-    sql_rows.append(detail['onSaleDate'][:100])
-    sql_rows.append(detail['heldPlace'][:100])
-    sql_rows.append(detail['description'][:500])
-sql_value_description = ', '.join(["({:})".format(', '.join(['%s' for i in range(8)])) for i in range(len(details))])
-cur.execute("INSERT INTO concert_list (`title`, `src_url`, `held_timestamp`, `held_date`, `held_time`, `on_sale_date`, `held_place`, `description`) " \
+for concert_detail in concert_details:
+    sql_rows.append(concert_detail['title'][:100])
+    sql_rows.append(concert_detail['src_url'][:100])
+    sql_rows.append(datetime.strptime(concert_detail['held_timestamp'], "%Y/%m/%d %H:%M:%S") if 'held_timestamp' in concert_detail else None)
+    sql_rows.append(concert_detail['held_date'][:100])
+    sql_rows.append(concert_detail['held_time'][:100])
+    sql_rows.append(concert_detail['held_place'][:100])
+    sql_rows.append(concert_detail['on_sale_date'][:100])
+    sql_rows.append(concert_detail['payment'][:100] if 'payment' in concert_detail else None)
+    sql_rows.append(concert_detail['program'][:100] if 'program' in concert_detail else None)
+    sql_rows.append(concert_detail['description'][:500])
+sql_value_description = ', '.join(["({:})".format(', '.join(['%s' for i in range(10)])) for i in range(len(concert_details))])
+cur.execute("INSERT INTO concert_list (`title`, `src_url`, `held_timestamp`, `held_date`, `held_time`, `held_place`, `on_sale_date`, `payment`, `program`, `description`) " \
     "VALUES " + sql_value_description + ";", sql_rows)
 conn.commit()
 

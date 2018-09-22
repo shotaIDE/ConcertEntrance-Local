@@ -56,8 +56,10 @@ app.get('/api/v1/getConcerts', (req, res) => {
           srcUrl: e['src_url'],
           heldDate: e['held_date'],
           heldTime: e['held_time'],
-          onSaleDate: e['on_sale_date'],
           heldPlace: e['held_place'],
+          onSaleDate: e['on_sale_date'],
+          payment: e['payment'],
+          program: e['program'],
           description: e['description']
         }
       })

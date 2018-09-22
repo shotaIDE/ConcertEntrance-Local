@@ -49,6 +49,9 @@ const styles = theme => ({
   avatar: {
     backgroundColor: lightGreen[700],
   },
+  lineWrap: {
+    margin: 0,
+  },
 });
 
 class ConcertCard extends React.Component {
@@ -61,7 +64,11 @@ class ConcertCard extends React.Component {
   render() {
     const { classes, item } = this.props;
     const heldDatetime = (item.heldDate && item.heldTime) ?
-      item.heldDate + " " + item.heldTime : "";
+      item.heldDate + " " + item.heldTime :
+      "";
+    const description = item.description.split("\n").map(e => {
+      return (<p className={classes.lineWrap}>{e}</p>)
+    });
     return (
       <Card className={classes.card}>
         <CardHeader
@@ -74,10 +81,16 @@ class ConcertCard extends React.Component {
           subheader={heldDatetime} />
         <CardContent className={classes.content}>
           <Typography component="p">
+            曲：{(item.program) ? item.program : "（未定）"}
+          </Typography>
+          <Typography component="p">
             前売開始日：{item.onSaleDate}
           </Typography>
           <Typography component="p">
             開催場所：{item.heldPlace}
+          </Typography>
+          <Typography component="p">
+            料金：{(item.payment) ? item.payment : "（情報なし）"}
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
@@ -100,7 +113,7 @@ class ConcertCard extends React.Component {
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
           <CardContent className={classes.content}>
             <Typography paragraph>
-              {item.description}
+              {description}
             </Typography>
           </CardContent>
         </Collapse>

@@ -1,13 +1,15 @@
 version: '3'
 services:
   note:
-    # image: node:alpine
     build: ./note
     image: ${IMAGE_REPOSITORY}/note:${NOTE_VERSION}
+    container_name: ${IMAGE_REPOSITORY}-note
     # command: node --inspect-brk=0.0.0.0:9000 server.js
     ports:
       - "80:3000"
       # - "9000:9000"
+    depends_on:
+      - mysql
     # volumes:
     #   - ./note:/home/node/note
     working_dir: '/home/node/note'
@@ -15,7 +17,7 @@ services:
   scraping:
     build: ./scraping
     image: ${IMAGE_REPOSITORY}/scraping:${SCRAPING_VERSION}
-    container_name: scraping
+    container_name: ${IMAGE_REPOSITORY}-scraping
     # command: python concert_scraping.py --debug --local
     # ports:
     #   - "9500:9500"

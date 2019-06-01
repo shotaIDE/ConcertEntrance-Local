@@ -23,7 +23,7 @@ services:
     #   - "9500:9500"
     depends_on:
       - mysql
-      - selenium-hub
+      - chrome
     # volumes:
     #   - ./scraping:/root/scraping
     working_dir: '/root/scraping'
